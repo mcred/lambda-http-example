@@ -1,7 +1,6 @@
 package main
 
 import (
-    "fmt"
     "net/http"
 )
 
@@ -27,7 +26,7 @@ func GetRoutes() []Route {
             Method: "GET",
             Path:   "/",
             Function: func(w http.ResponseWriter, req *http.Request) {
-                fmt.Fprint(w, "Hello, World!")
+                w.Write([]byte("Hello, World!"))
                 w.WriteHeader(http.StatusOK)
             },
         },
@@ -35,7 +34,7 @@ func GetRoutes() []Route {
             Method: "POST",
             Path:   "/",
             Function: func(w http.ResponseWriter, req *http.Request) {
-                fmt.Fprint(w, "You've made a POST request")
+                w.Write([]byte("You've made a POST request"))
                 w.WriteHeader(http.StatusCreated)
             },
         },
