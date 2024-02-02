@@ -52,7 +52,7 @@ resource "aws_lambda_function" "app" {
 }
 
 resource "aws_apigatewayv2_api" "http_tester" {
-  name          = "-http-connection-tester"
+  name          = "http-connection-tester"
   protocol_type = "HTTP"
 
   cors_configuration {
@@ -81,7 +81,7 @@ resource "aws_apigatewayv2_integration" "tester_integration" {
   payload_format_version = "2.0"
 }
 
-resource "aws_apigatewayv2_route" "_route" {
+resource "aws_apigatewayv2_route" "route" {
   api_id    = aws_apigatewayv2_api.http_tester.id
   route_key = "ANY /{proxy+}"
   target    = "integrations/${aws_apigatewayv2_integration.tester_integration.id}"

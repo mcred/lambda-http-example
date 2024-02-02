@@ -2,12 +2,14 @@ package main
 
 import (
     "bytes"
+    "fmt"
     "github.com/aws/aws-lambda-go/events"
     "github.com/aws/aws-lambda-go/lambda"
     "net/http"
 )
 
 func main() {
+    fmt.Println("Starting the application...")
     router := GetRouter()
 
     lambda.Start(func(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -16,7 +18,9 @@ func main() {
             return events.APIGatewayProxyResponse{}, err
         }
 
-        w := &responseWriter{}
+        w := &responseWriter{
+            HeaderMap: make(http.Header),
+        }
         router.Handle(w, req)
 
         return events.APIGatewayProxyResponse{
@@ -27,9 +31,13 @@ func main() {
 }
 
 type responseWriter struct {
-    http.ResponseWriter
+    HeaderMap  http.Header
     statusCode int
     body       bytes.Buffer
+}
+
+func (rw *responseWriter) Header() http.Header {
+    return rw.HeaderMap
 }
 
 func (rw *responseWriter) WriteHeader(statusCode int) {
