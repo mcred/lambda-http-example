@@ -59,11 +59,9 @@ func main() {
 		if handle == nil {
 			return events.APIGatewayV2HTTPResponse{StatusCode: http.StatusNotFound}, nil
 		}
-
 		w := &responseWriter{
 			HeaderMap: make(http.Header),
 		}
-
 		handle(w, req, params)
 
 		return events.APIGatewayV2HTTPResponse{
