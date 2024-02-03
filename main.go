@@ -6,6 +6,7 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/julienschmidt/httprouter"
+	"lightweight-route-framework/internal/models"
 	"net/http"
 )
 
@@ -28,14 +29,20 @@ func (rw *responseWriter) Write(b []byte) (int, error) {
 	return len(b), nil
 }
 
+func initRouter() *httprouter.Router {
+	router := httprouter.New()
+	router.GET("/", models.GetUsers)
+	router.GET("/users", models.GetUsers)
+	router.GET("/users/", models.GetUsers)
+	router.GET("/users/:id", models.GetUserById)
+	router.DELETE("/users/:id", models.DeleteUserById)
+	return router
+}
+
 func main() {
 	fmt.Println("Starting the application...")
-	// Create a new router
-	router := httprouter.New()
 
-	// Register the routes
-	router.GET("/", getUsers)
-	router.GET("/:id", getUserById)
+	router := initRouter()
 
 	// Start the lambda
 	lambda.Start(func(ctx context.Context, request events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
@@ -44,7 +51,7 @@ func main() {
 			return events.APIGatewayV2HTTPResponse{}, err
 		}
 
-		handle, _, _ := router.Lookup(req.Method, req.URL.Path)
+		handle, params, _ := router.Lookup(req.Method, req.URL.Path)
 		if handle == nil {
 			return events.APIGatewayV2HTTPResponse{StatusCode: http.StatusNotFound}, nil
 		}
@@ -52,21 +59,12 @@ func main() {
 		w := &responseWriter{
 			HeaderMap: make(http.Header),
 		}
-		handle(w, req, nil)
+
+		handle(w, req, params)
 
 		return events.APIGatewayV2HTTPResponse{
 			StatusCode: w.statusCode,
 			Body:       string(w.body),
 		}, nil
 	})
-}
-
-func getUsers(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	w.Write([]byte("getUsers GET /"))
-	w.WriteHeader(http.StatusOK)
-}
-
-func getUserById(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	w.Write([]byte("getUserById GET /" + ps.ByName("id")))
-	w.WriteHeader(http.StatusOK)
 }
