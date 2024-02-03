@@ -10,24 +10,28 @@ This is a simple example to test the performance of a simple HTTP router using A
 * [tflocal-cli](https://github.com/localstack/terraform-local)
 
 ## Running the example
-1. Start the stack
+1. Set LOCALSTACK_API_KEY to the env
+```bash
+echo LOCALSTACK_API_KEY=xxxxxxx >> .env
+``` 
+2. Start the stack
 ```bash
 make start
 ```
-2. Running the example for the first time
+3. Running the example for the first time
 ```bash
 make init
 make apply
 ```
-3. Refreshing the code after the first time
+4. Refreshing the code after the first time
 ```bash
 make refresh
 ```
-4. Destroying the example
+5. Destroying the example
 ```bash
 make destroy
 ```
-5. Stopping the stack
+6. Stopping the stack
 ```bash
 make stop
 ``` 
