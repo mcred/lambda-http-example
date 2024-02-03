@@ -9,8 +9,6 @@ import (
 	"net/http"
 )
 
-type RouteHandlerFunc func(context.Context, events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
-
 type responseWriter struct {
 	HeaderMap  http.Header
 	statusCode int
@@ -36,23 +34,19 @@ func main() {
 	router := httprouter.New()
 
 	// Register the routes
-	router.GET("/", wrapHandler(handleRoot))
-	router.GET("/:id", wrapHandler(handleID))
+	router.GET("/", getUsers)
+	router.GET("/:id", getUserById)
 
 	// Start the lambda
-	lambda.Start(func(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-		req, err := http.NewRequest(request.HTTPMethod, request.Path, nil)
+	lambda.Start(func(ctx context.Context, request events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
+		req, err := http.NewRequest(request.RequestContext.HTTP.Method, request.RawPath, nil)
 		if err != nil {
-			return events.APIGatewayProxyResponse{}, err
-		}
-
-		if req.URL.Path == "" {
-			req.URL.Path = "/"
+			return events.APIGatewayV2HTTPResponse{}, err
 		}
 
 		handle, _, _ := router.Lookup(req.Method, req.URL.Path)
 		if handle == nil {
-			return events.APIGatewayProxyResponse{StatusCode: http.StatusNotFound}, nil
+			return events.APIGatewayV2HTTPResponse{StatusCode: http.StatusNotFound}, nil
 		}
 
 		w := &responseWriter{
@@ -60,33 +54,19 @@ func main() {
 		}
 		handle(w, req, nil)
 
-		return events.APIGatewayProxyResponse{
+		return events.APIGatewayV2HTTPResponse{
 			StatusCode: w.statusCode,
 			Body:       string(w.body),
 		}, nil
 	})
 }
 
-func handleRoot(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	// Your handler logic here
-	return events.APIGatewayProxyResponse{Body: "Hello, World!", StatusCode: 200}, nil
+func getUsers(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	w.Write([]byte("getUsers GET /"))
+	w.WriteHeader(http.StatusOK)
 }
 
-func handleID(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	// Your handler logic here
-	id := request.PathParameters["id"]
-	return events.APIGatewayProxyResponse{Body: "You've hit GET /" + id, StatusCode: 200}, nil
-}
-
-func wrapHandler(h RouteHandlerFunc) httprouter.Handle {
-	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		req := events.APIGatewayProxyRequest{
-			HTTPMethod: r.Method,
-			Path:       r.URL.Path,
-			// Add other fields as needed
-		}
-		res, _ := h(context.Background(), req)
-		w.WriteHeader(res.StatusCode)
-		w.Write([]byte(res.Body))
-	}
+func getUserById(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	w.Write([]byte("getUserById GET /" + ps.ByName("id")))
+	w.WriteHeader(http.StatusOK)
 }
