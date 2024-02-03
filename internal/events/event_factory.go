@@ -20,6 +20,7 @@ func (ef *EventFactory) RegisterEvent(name string, event Event) {
 	ef.events[name] = event
 }
 
+// GetEventFactory function
 func GetEventFactory() *EventFactory {
 	ef := &EventFactory{
 		events: make(map[string]Event),

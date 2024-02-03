@@ -6,7 +6,7 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/julienschmidt/httprouter"
-	"github.com/mcred/lambda-http-example/internal/models"
+	"github.com/mcred/lambda-http-example/internal/services"
 	"net/http"
 )
 
@@ -31,11 +31,12 @@ func (rw *responseWriter) Write(b []byte) (int, error) {
 
 func initRouter() *httprouter.Router {
 	router := httprouter.New()
-	router.GET("/", models.GetUsers)
-	router.GET("/users", models.GetUsers)
-	router.GET("/users/", models.GetUsers)
-	router.GET("/users/:id", models.GetUserById)
-	router.DELETE("/users/:id", models.DeleteUserById)
+	sf := services.NewServiceFactory()
+	router.GET("/", sf.GetService("UserService").GetAll)
+	router.GET("/users", sf.GetService("UserService").GetAll)
+	router.GET("/users/", sf.GetService("UserService").GetAll)
+	router.GET("/users/:id", sf.GetService("UserService").GetByID)
+	router.DELETE("/users/:id", sf.GetService("UserService").DeleteByID)
 	return router
 }
 
