@@ -2,7 +2,7 @@ package models
 
 import (
 	"github.com/julienschmidt/httprouter"
-	"lightweight-route-framework/internal/events"
+	"github.com/mcred/lambda-http-example/internal/events"
 	"net/http"
 )
 

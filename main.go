@@ -6,7 +6,7 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/julienschmidt/httprouter"
-	"lightweight-route-framework/internal/models"
+	"github.com/mcred/lambda-http-example/internal/models"
 	"net/http"
 )
 

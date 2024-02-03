@@ -1,4 +1,4 @@
-module lightweight-route-framework
+module github.com/mcred/lambda-http-example
 
 go 1.21
 
