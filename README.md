@@ -1,6 +1,6 @@
-# Lambda HTTP Router Experiment
+# Lambda HTTP Router Example
 
-This is a simple experiment to test the performance of a simple HTTP router using AWS Lambda.
+This is a simple example to test the performance of a simple HTTP router using AWS Lambda.
 
 ## Requirements
 * [go](https://golang.org/)
@@ -9,12 +9,12 @@ This is a simple experiment to test the performance of a simple HTTP router usin
 * [awslocal-cli](https://github.com/localstack/awscli-local)
 * [tflocal-cli](https://github.com/localstack/terraform-local)
 
-## Running the experiment
+## Running the example
 1. Start the stack
 ```bash
 make start
 ```
-2. Running the experiment for the first time
+2. Running the example for the first time
 ```bash
 make init
 make apply
@@ -23,7 +23,7 @@ make apply
 ```bash
 make refresh
 ```
-4. Destroying the experiment
+4. Destroying the example
 ```bash
 make destroy
 ```
