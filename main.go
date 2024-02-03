@@ -16,14 +16,17 @@ type responseWriter struct {
 	body       []byte
 }
 
+// Header returns the response headers
 func (rw *responseWriter) Header() http.Header {
 	return rw.HeaderMap
 }
 
+// WriteHeader sets the response status code
 func (rw *responseWriter) WriteHeader(statusCode int) {
 	rw.statusCode = statusCode
 }
 
+// Write appends data to the response body
 func (rw *responseWriter) Write(b []byte) (int, error) {
 	rw.body = append(rw.body, b...)
 	return len(b), nil
