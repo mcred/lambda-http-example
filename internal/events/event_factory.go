@@ -3,7 +3,6 @@ package events
 // Event interface
 type Event interface {
 	Call() (string, error)
-	GetName() string
 }
 
 // EventFactory struct
