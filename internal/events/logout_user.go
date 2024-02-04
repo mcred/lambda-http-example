@@ -8,6 +8,6 @@ func (lu *LogoutUser) Call() (string, error) {
 	return "user logged out", nil
 }
 
-func getLogoutUser() *LogoutUser {
+func newLogoutUser() *LogoutUser {
 	return &LogoutUser{}
 }
