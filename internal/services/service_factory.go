@@ -30,20 +30,22 @@ type ServiceFactory struct {
 	services map[string]Service
 }
 
-// NewServiceFactory creates a new service factory
-func NewServiceFactory() *ServiceFactory {
-	ef := events.GetEventFactory()
-	bs := NewBaseService(ef)
-	us := NewUserService(bs)
-
-	return &ServiceFactory{
-		services: map[string]Service{
-			"UserService": us,
-		},
-	}
-}
-
 // GetService returns a service by name
 func (sf *ServiceFactory) GetService(name string) Service {
 	return sf.services[name]
+}
+
+func (sf *ServiceFactory) RegisterService(name string, service Service) {
+	sf.services[name] = service
+}
+
+// NewServiceFactory creates a new service factory
+func NewServiceFactory() *ServiceFactory {
+	ef := events.GetEventFactory()
+	sf := &ServiceFactory{
+		services: make(map[string]Service),
+	}
+	bs := NewBaseService(ef)
+	sf.RegisterService("UserService", NewUserService(bs))
+	return sf
 }
