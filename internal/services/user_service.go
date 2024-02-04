@@ -7,13 +7,13 @@ import (
 
 // UserService is a service for managing users
 type UserService struct {
-	*BaseService
+	*baseService
 }
 
-// NewUserService creates a new user service
-func NewUserService(bs *BaseService) *UserService {
+// newUserService creates a new user service
+func newUserService(bs *baseService) *UserService {
 	return &UserService{
-		BaseService: bs,
+		baseService: bs,
 	}
 }
 
