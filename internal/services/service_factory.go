@@ -6,20 +6,20 @@ import (
 	"net/http"
 )
 
-// baseService is a base service that all other services will inherit from
+// baseService is a base Service that all other services will inherit from
 type baseService struct {
 	eventFactory *events.EventFactory
 }
 
-// newBaseService creates a new base service
+// newBaseService creates a new base Service
 func newBaseService(ef *events.EventFactory) *baseService {
 	return &baseService{
 		eventFactory: ef,
 	}
 }
 
-// service is an interface that all services will implement
-type service interface {
+// Service is an interface that all services will implement
+type Service interface {
 	GetAll(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
 	GetByID(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
 	DeleteByID(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
@@ -27,15 +27,15 @@ type service interface {
 
 // ServiceFactory is a factory for creating services
 type ServiceFactory struct {
-	services map[string]service
+	services map[string]Service
 }
 
 // GetService returns a service by name
-func (sf *ServiceFactory) GetService(name string) service {
+func (sf *ServiceFactory) GetService(name string) Service {
 	return sf.services[name]
 }
 
-func (sf *ServiceFactory) registerService(name string, service service) {
+func (sf *ServiceFactory) registerService(name string, service Service) {
 	sf.services[name] = service
 }
 
@@ -43,7 +43,7 @@ func (sf *ServiceFactory) registerService(name string, service service) {
 func NewServiceFactory() *ServiceFactory {
 	ef := events.GetEventFactory()
 	sf := &ServiceFactory{
-		services: make(map[string]service),
+		services: make(map[string]Service),
 	}
 	bs := newBaseService(ef)
 	sf.registerService("UserService", newUserService(bs))
