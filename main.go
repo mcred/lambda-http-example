@@ -8,6 +8,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/mcred/lambda-http-example/internal/services"
 	"net/http"
+	"strings"
 )
 
 type responseWriter struct {
@@ -50,7 +51,7 @@ func main() {
 
 	// Start the lambda
 	lambda.Start(func(ctx context.Context, request events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
-		req, err := http.NewRequest(request.RequestContext.HTTP.Method, request.RawPath, nil)
+		req, err := http.NewRequest(request.RequestContext.HTTP.Method, request.RawPath, strings.NewReader(request.Body))
 		if err != nil {
 			return events.APIGatewayV2HTTPResponse{}, err
 		}
