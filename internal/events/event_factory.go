@@ -20,8 +20,8 @@ func (ef *EventFactory) registerEvent(name string, event Event) {
 	ef.events[name] = event
 }
 
-// GetEventFactory function
-func GetEventFactory() *EventFactory {
+// NewEventFactory function
+func NewEventFactory() *EventFactory {
 	ef := &EventFactory{
 		events: make(map[string]Event),
 	}

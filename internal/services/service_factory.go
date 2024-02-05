@@ -41,7 +41,7 @@ func (sf *ServiceFactory) registerService(name string, service Service) {
 
 // NewServiceFactory creates a new service factory
 func NewServiceFactory() *ServiceFactory {
-	ef := events.GetEventFactory()
+	ef := events.NewEventFactory()
 	sf := &ServiceFactory{
 		services: make(map[string]Service),
 	}
