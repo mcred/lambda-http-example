@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/julienschmidt/httprouter"
+	"github.com/mcred/lambda-http-example/internal/events"
 	"net/http"
 )
 
@@ -31,8 +32,7 @@ func (us *UserService) GetByID(w http.ResponseWriter, r *http.Request, ps httpro
 
 // DeleteByID deletes a user by ID
 func (us *UserService) DeleteByID(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	logoutUser := us.eventFactory.GetEvent("logout_user")
-	s, _ := logoutUser.Call()
+	s, _ := us.eventFactory.Call(events.LOGOUT_USER)
 	w.Write([]byte(s + "\n"))
 	w.Write([]byte("deleteUserById DELETE /" + ps.ByName("id") + "\n"))
 	w.WriteHeader(http.StatusOK)

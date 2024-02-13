@@ -1,13 +1,11 @@
 package events
 
-// LogoutUser is an event for logging out a user
-type LogoutUser struct{}
+type logoutUser struct{}
 
-// Call logs out a user
-func (lu *LogoutUser) Call() (string, error) {
+func (lu *logoutUser) call() (string, error) {
 	return "user logged out", nil
 }
 
-func newLogoutUser() *LogoutUser {
-	return &LogoutUser{}
+func newLogoutUser() *logoutUser {
+	return &logoutUser{}
 }

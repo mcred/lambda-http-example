@@ -2,29 +2,39 @@ package events
 
 // Event interface
 type Event interface {
-	Call() (string, error)
+	call() (string, error)
 }
+
+// EventName type
+type EventName int
+
+const (
+	LOGOUT_USER EventName = iota
+)
 
 // EventFactory struct
 type EventFactory struct {
-	events map[string]Event
+	events map[EventName]Event
 }
 
-// GetEvent method for EventFactory
-func (ef *EventFactory) GetEvent(name string) Event {
+func (ef *EventFactory) getEvent(name EventName) Event {
 	return ef.events[name]
 }
 
-// registerEvent method for EventFactory
-func (ef *EventFactory) registerEvent(name string, event Event) {
+func (ef *EventFactory) registerEvent(name EventName, event Event) {
 	ef.events[name] = event
+}
+
+// Call method for EventFactory
+func (ef *EventFactory) Call(event EventName) (string, error) {
+	return ef.getEvent(event).call()
 }
 
 // NewEventFactory function
 func NewEventFactory() *EventFactory {
 	ef := &EventFactory{
-		events: make(map[string]Event),
+		events: make(map[EventName]Event),
 	}
-	ef.registerEvent("logout_user", newLogoutUser())
+	ef.registerEvent(LOGOUT_USER, newLogoutUser())
 	return ef
 }
