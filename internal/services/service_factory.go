@@ -27,15 +27,15 @@ type Service interface {
 
 // ServiceFactory is a factory for creating services
 type ServiceFactory struct {
-	services map[string]Service
+	services map[ServiceName]Service
 }
 
 // GetService returns a service by name
-func (sf *ServiceFactory) GetService(name string) Service {
+func (sf *ServiceFactory) GetService(name ServiceName) Service {
 	return sf.services[name]
 }
 
-func (sf *ServiceFactory) registerService(name string, service Service) {
+func (sf *ServiceFactory) registerService(name ServiceName, service Service) {
 	sf.services[name] = service
 }
 
@@ -43,9 +43,15 @@ func (sf *ServiceFactory) registerService(name string, service Service) {
 func NewServiceFactory() *ServiceFactory {
 	ef := events.NewEventFactory()
 	sf := &ServiceFactory{
-		services: make(map[string]Service),
+		services: make(map[ServiceName]Service),
 	}
 	bs := newBaseService(ef)
-	sf.registerService("UserService", newUserService(bs))
+	sf.registerService(USER_SERVICE, newUserService(bs))
 	return sf
 }
+
+type ServiceName int
+
+const (
+	USER_SERVICE ServiceName = iota
+)

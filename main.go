@@ -36,11 +36,11 @@ func (rw *responseWriter) Write(b []byte) (int, error) {
 func initRouter() *httprouter.Router {
 	router := httprouter.New()
 	sf := services.NewServiceFactory()
-	router.GET("/", sf.GetService("UserService").GetAll)
-	router.GET("/users", sf.GetService("UserService").GetAll)
-	router.GET("/users/", sf.GetService("UserService").GetAll)
-	router.GET("/users/:id", sf.GetService("UserService").GetByID)
-	router.DELETE("/users/:id", sf.GetService("UserService").DeleteByID)
+	router.GET("/", sf.GetService(services.USER_SERVICE).GetAll)
+	router.GET("/users", sf.GetService(services.USER_SERVICE).GetAll)
+	router.GET("/users/", sf.GetService(services.USER_SERVICE).GetAll)
+	router.GET("/users/:id", sf.GetService(services.USER_SERVICE).GetByID)
+	router.DELETE("/users/:id", sf.GetService(services.USER_SERVICE).DeleteByID)
 	return router
 }
 

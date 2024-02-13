@@ -5,13 +5,6 @@ type Event interface {
 	call() (string, error)
 }
 
-// EventName type
-type EventName int
-
-const (
-	LOGOUT_USER EventName = iota
-)
-
 // EventFactory struct
 type EventFactory struct {
 	events map[EventName]Event
@@ -38,3 +31,10 @@ func NewEventFactory() *EventFactory {
 	ef.registerEvent(LOGOUT_USER, newLogoutUser())
 	return ef
 }
+
+// EventName type
+type EventName int
+
+const (
+	LOGOUT_USER EventName = iota
+)
