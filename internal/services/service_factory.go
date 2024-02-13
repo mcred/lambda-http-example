@@ -6,12 +6,10 @@ import (
 	"net/http"
 )
 
-// baseService is a base Service that all other services will inherit from
 type baseService struct {
 	eventFactory *events.EventFactory
 }
 
-// newBaseService creates a new base Service
 func newBaseService(ef *events.EventFactory) *baseService {
 	return &baseService{
 		eventFactory: ef,
@@ -50,6 +48,7 @@ func NewServiceFactory() *ServiceFactory {
 	return sf
 }
 
+// ServiceName type
 type ServiceName int
 
 const (

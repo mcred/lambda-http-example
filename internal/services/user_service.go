@@ -11,7 +11,6 @@ type UserService struct {
 	*baseService
 }
 
-// newUserService creates a new user Service
 func newUserService(bs *baseService) *UserService {
 	return &UserService{
 		baseService: bs,
